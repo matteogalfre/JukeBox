@@ -1,0 +1,23 @@
+node_modules/
+.expo/
+dist/
+/android/
+/ios/
+*.apk
+*.aab
+expo-env.d.ts
+.DS_Store
+.claude/
+.kotlin/
+
+# sorties de build des modules natifs
+modules/*/android/build/
+modules/*/android/.gradle/
+
+# clés de signature
+*.jks
+*.keystore
+signing/
+
+# notes de publication
+notes/

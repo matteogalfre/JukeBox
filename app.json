@@ -1,0 +1,68 @@
+{
+  "expo": {
+    "name": "JukeBox",
+    "slug": "jukebox",
+    "version": "0.2.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "scheme": "jukebox",
+    "userInterfaceStyle": "dark",
+    "android": {
+      "package": "com.matteogalfre.jukebox",
+      "versionCode": 2,
+      "adaptiveIcon": {
+        "backgroundColor": "#CCFF4D",
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "monochromeImage": "./assets/adaptive-icon-monochrome.png"
+      },
+      "permissions": [
+        "android.permission.READ_MEDIA_AUDIO",
+        "android.permission.POST_NOTIFICATIONS"
+      ]
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "single"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-sqlite",
+      [
+        "expo-audio",
+        {
+          "recordAudioAndroid": false,
+          "microphonePermission": false,
+          "enableBackgroundPlayback": false
+        }
+      ],
+      "expo-image",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/splash-icon.png",
+          "imageWidth": 120,
+          "backgroundColor": "#0A0A0A"
+        }
+      ],
+      [
+        "expo-notifications",
+        {
+          "color": "#CCFF4D"
+        }
+      ],
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "buildArchs": [
+              "arm64-v8a"
+            ],
+            "useLegacyPackaging": true
+          }
+        }
+      ],
+      "expo-font"
+    ],
+    "backgroundColor": "#0A0A0A"
+  }
+}
