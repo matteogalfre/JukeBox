@@ -2,14 +2,14 @@
   "expo": {
     "name": "JukeBox",
     "slug": "jukebox",
-    "version": "0.2.0",
+    "version": "0.2.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "scheme": "jukebox",
     "userInterfaceStyle": "dark",
     "android": {
       "package": "com.matteogalfre.jukebox",
-      "versionCode": 2,
+      "versionCode": 3,
       "adaptiveIcon": {
         "backgroundColor": "#CCFF4D",
         "foregroundImage": "./assets/adaptive-icon.png",

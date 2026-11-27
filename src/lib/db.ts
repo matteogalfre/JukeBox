@@ -76,6 +76,21 @@ async function migrate(d: SQLite.SQLiteDatabase) {
   if (!cols.has('youtube')) await d.execAsync('ALTER TABLE proposals ADD COLUMN youtube INTEGER');
 }
 
+// Une seule transaction à la fois. expo-sqlite partage une connexion : si deux transactions
+// se croisent (deux rafraîchissements lancés ensemble), le second BEGIN échoue et son ROLLBACK
+// annule le travail du premier (« cannot rollback - no transaction is active »).
+let queue: Promise<unknown> = Promise.resolve();
+
+export function transaction(task: (d: SQLite.SQLiteDatabase) => Promise<void>): Promise<void> {
+  const run = async () => {
+    const d = await db();
+    await d.withTransactionAsync(() => task(d));
+  };
+  const p = queue.then(run, run);
+  queue = p.catch(() => undefined);
+  return p;
+}
+
 export async function getMeta(key: string): Promise<string | null> {
   const row = await (await db()).getFirstAsync<{ value: string }>('SELECT value FROM meta WHERE key = ?', key);
   return row?.value ?? null;

@@ -4,7 +4,7 @@ import { Platform } from 'react-native';
 import Ecoute from '../../modules/ecoute';
 import Telechargeur, { type DownloadJob } from '../../modules/telechargeur';
 import { DEMO } from '../data/demo';
-import { artistCache, db, getMeta, memo, setMeta, type Decision, type ProposalRow } from './db';
+import { artistCache, db, getMeta, memo, setMeta, transaction, type Decision, type ProposalRow } from './db';
 import * as dz from './deezer';
 import { importListens, syncLibrary, syncPlaylists } from './ecoutes';
 import { decay, genreFactor, isBlocked, listenValue, rotate, verdictScore } from './gout';
@@ -268,9 +268,8 @@ async function exclusions() {
 }
 
 async function save(batch: string, source: 'weekly' | 'search', list: Proposal[]) {
-  const d = await db();
   const now = Date.now();
-  await d.withTransactionAsync(async () => {
+  await transaction(async (d) => {
     for (const [i, p] of list.entries()) {
       await d.runAsync(
         `INSERT OR IGNORE INTO proposals (id, batch, source, position, created_at, title, artist, artist_key, track_key,
@@ -436,7 +435,7 @@ async function demoListens() {
   let seed = 7;
   const rand = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
   const now = Date.now();
-  await d.withTransactionAsync(async () => {
+  await transaction(async (d) => {
     for (let i = 0; i < 160; i++) {
       // Les premiers titres reviennent plus souvent, surtout le soir et le week-end.
       const p = DEMO[Math.floor(Math.pow(rand(), 1.8) * DEMO.length)];
@@ -558,8 +557,19 @@ export async function retry(row: ProposalRow) {
   await enqueue(row);
 }
 
+// Un rafraîchissement à la fois : l'écran Semaine en lance un à l'ouverture pendant que la
+// sélection du lundi lance le sien. Le second attend la fin du premier.
+let refreshing: Promise<void> = Promise.resolve();
+
 /** Relit les écoutes et les téléchargements ; la bibliothèque et les playlists toutes les 10 min. */
-export async function refresh(force = false) {
+export function refresh(force = false): Promise<void> {
+  const run = () => doRefresh(force);
+  const p = refreshing.then(run, run);
+  refreshing = p.catch(() => undefined);
+  return p;
+}
+
+async function doRefresh(force: boolean) {
   if (demoMode) return;
   await importListens();
   await sendToListenBrainz().catch(() => undefined);

@@ -1,6 +1,6 @@
 // Récupère les écoutes notées par le service Android et la musique du téléphone.
 import Ecoute from '../../modules/ecoute';
-import { db } from './db';
+import { getMeta, setMeta, transaction } from './db';
 import { artistKey, trackKey } from './norm';
 
 type RawListen = {
@@ -25,7 +25,9 @@ const UNKNOWN = /^(<unknown>|unknown|inconnu|artiste inconnu|)$/i;
 
 export async function importListens(): Promise<number> {
   if (!Ecoute) return 0;
-  const text = Ecoute.drain();
+  // Le fichier du service est vidé à la lecture : si l'enregistrement échoue, les lignes sont
+  // gardées de côté et reprises au passage suivant, pour ne perdre aucune écoute.
+  const text = ((await getMeta('listens_pending')) ?? '') + Ecoute.drain();
   if (!text) return 0;
   const rows = text
     .split('\n')
@@ -34,26 +36,30 @@ export async function importListens(): Promise<number> {
       try { return JSON.parse(l) as RawListen; } catch { return null; }
     })
     .filter((r): r is RawListen => !!r);
-  const d = await db();
-  await d.withTransactionAsync(async () => {
-    for (const r of rows) {
-      const artist = UNKNOWN.test(r.artist.trim()) ? '' : r.artist;
-      await d.runAsync(
-        `INSERT INTO listens (started_at, ended_at, title, artist, album, duration_ms, played_ms, pkg, kind, artist_key, track_key)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-        r.startedAt, r.endedAt, r.title, artist, r.album, r.durationMs, r.playedMs, r.pkg,
-        classify(r.playedMs, r.durationMs), artistKey(artist), trackKey(artist, r.title),
-      );
-    }
-  });
+  try {
+    await transaction(async (d) => {
+      for (const r of rows) {
+        const artist = UNKNOWN.test(r.artist.trim()) ? '' : r.artist;
+        await d.runAsync(
+          `INSERT INTO listens (started_at, ended_at, title, artist, album, duration_ms, played_ms, pkg, kind, artist_key, track_key)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+          r.startedAt, r.endedAt, r.title, artist, r.album, r.durationMs, r.playedMs, r.pkg,
+          classify(r.playedMs, r.durationMs), artistKey(artist), trackKey(artist, r.title),
+        );
+      }
+    });
+  } catch (e) {
+    await setMeta('listens_pending', text).catch(() => undefined);
+    throw e;
+  }
+  await setMeta('listens_pending', '');
   return rows.length;
 }
 
 export async function syncLibrary(): Promise<number> {
   if (!Ecoute) return 0;
   const tracks = await Ecoute.library();
-  const d = await db();
-  await d.withTransactionAsync(async () => {
+  await transaction(async (d) => {
     await d.runAsync('DELETE FROM library');
     for (const t of tracks) {
       const artist = UNKNOWN.test((t.artist ?? '').trim()) ? '' : t.artist ?? '';
@@ -70,8 +76,7 @@ export async function syncLibrary(): Promise<number> {
 export async function syncPlaylists(): Promise<number> {
   if (!Ecoute) return 0;
   const lists = await Ecoute.playlists();
-  const d = await db();
-  await d.withTransactionAsync(async () => {
+  await transaction(async (d) => {
     await d.runAsync('DELETE FROM playlist_tracks');
     for (const pl of lists) {
       for (const t of pl.tracks) {
