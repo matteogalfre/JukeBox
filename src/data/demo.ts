@@ -3,20 +3,20 @@ import type { Proposal } from '../lib/reco';
 
 export const DEMO: Proposal[] = [
   {
-    "id": "4250840701",
-    "title": "sous influence",
-    "artist": "Eddy de Pretto",
-    "artistKey": "eddy de pretto",
-    "trackKey": "eddy de pretto|sous influence",
-    "album": "sous influence",
-    "durationS": 187,
-    "cover": "https://cdn-images.dzcdn.net/images/cover/fc5e6426801a5c402b9cbe3180d023b2/1000x1000-000000-80-0-0.jpg",
-    "coverMedium": "https://cdn-images.dzcdn.net/images/cover/fc5e6426801a5c402b9cbe3180d023b2/250x250-000000-80-0-0.jpg",
-    "preview": "https://cdnt-preview.dzcdn.net/api/1/1/9/9/e/0/99eacbfc72bbc48a0c4bcda259703e98.mp3?hdnea=exp=1794987623~acl=/api/1/1/9/9/e/0/99eacbfc72bbc48a0c4bcda259703e98.mp3*~data=user_id=0,application_id=42~hmac=4944c4b2f7559d0000ad3d28431bd2d6c7e9e9cd9628667aa6e21f3eda2e2dff",
+    "id": "109176426",
+    "title": "Makeba",
+    "artist": "Jain",
+    "artistKey": "jain",
+    "trackKey": "jain|makeba",
+    "album": "Zanaka",
+    "durationS": 249,
+    "cover": "https://cdn-images.dzcdn.net/images/cover/cc09c2457ce3e1adc3a7a23f93440e59/1000x1000-000000-80-0-0.jpg",
+    "coverMedium": "https://cdn-images.dzcdn.net/images/cover/cc09c2457ce3e1adc3a7a23f93440e59/250x250-000000-80-0-0.jpg",
+    "preview": "https://cdnt-preview.dzcdn.net/api/1/1/1/a/6/0/1a64836be22e29ed21108527f7d0178b.mp3?hdnea=exp=1795784621~acl=/api/1/1/1/a/6/0/1a64836be22e29ed21108527f7d0178b.mp3*~data=user_id=0,application_id=42~hmac=36e0a292800573c2f47a88fa2fcf174b34b2cfc9a04842431b24c41cb5ef32f4",
     "genre": "Pop",
-    "reason": "Proche de Angèle",
+    "reason": "Proche de Stromae",
     "kind": "new",
-    "deezerArtistId": 9030084
+    "deezerArtistId": 5951582
   },
   {
     "id": "137260126",
@@ -51,20 +51,20 @@ export const DEMO: Proposal[] = [
     "deezerArtistId": 4103977
   },
   {
-    "id": "426047942",
-    "title": "Hit Sale",
-    "artist": "Therapie TAXI",
-    "artistKey": "therapie taxi",
-    "trackKey": "therapie taxi|hit sale",
-    "album": "Hit Sale",
-    "durationS": 184,
-    "cover": "https://cdn-images.dzcdn.net/images/cover/0bb30d5a22e0fa69e169f8bdaa448dcd/1000x1000-000000-80-0-0.jpg",
-    "coverMedium": "https://cdn-images.dzcdn.net/images/cover/0bb30d5a22e0fa69e169f8bdaa448dcd/250x250-000000-80-0-0.jpg",
-    "preview": "https://cdnt-preview.dzcdn.net/api/1/1/0/b/1/0/0b14a0161a550f5e3aef56fa3f1f7fcc.mp3?hdnea=exp=1794987627~acl=/api/1/1/0/b/1/0/0b14a0161a550f5e3aef56fa3f1f7fcc.mp3*~data=user_id=0,application_id=42~hmac=d744418a5350b64ca773847c62ee04ae1be8ace61ab382d200671c2e19dd1d80",
+    "id": "1490343272",
+    "title": "Le Dernier Jour du Disco",
+    "artist": "Juliette Armanet",
+    "artistKey": "juliette armanet",
+    "trackKey": "juliette armanet|le dernier jour du disco",
+    "album": "Le Dernier Jour du Disco",
+    "durationS": 207,
+    "cover": "https://cdn-images.dzcdn.net/images/cover/8a5e52d2583e2a2c5c7d3d23d13f68d5/1000x1000-000000-80-0-0.jpg",
+    "coverMedium": "https://cdn-images.dzcdn.net/images/cover/8a5e52d2583e2a2c5c7d3d23d13f68d5/250x250-000000-80-0-0.jpg",
+    "preview": "https://cdnt-preview.dzcdn.net/api/1/1/e/f/a/0/efa870f57afdc1d5fe8c4165ad2aba39.mp3?hdnea=exp=1795784621~acl=/api/1/1/e/f/a/0/efa870f57afdc1d5fe8c4165ad2aba39.mp3*~data=user_id=0,application_id=42~hmac=5acd485f97551e680da74a51aa1fd34ef72c79de33050480967a6916756e6e8d",
     "genre": "Pop",
-    "reason": "Proche de Angèle",
+    "reason": "Proche de Clara Luciani",
     "kind": "new",
-    "deezerArtistId": 10806366
+    "deezerArtistId": 5848618
   },
   {
     "id": "4342358342",
